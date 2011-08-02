@@ -108,8 +108,6 @@ PPPOEInitDevice(void)
 	novm("PPPoE session data");
     }
     memset(conn, 0, sizeof(PPPoEConnection));
-    conn->acName = acName;
-    conn->serviceName = pppd_pppoe_service;
     conn->ifName = devnam;
     conn->discoverySocket = -1;
     conn->sessionSocket = -1;
@@ -133,6 +131,8 @@ PPPOEConnectDevice(void)
 {
     struct sockaddr_pppox sp;
 
+    conn->acName = acName;
+    conn->serviceName = pppd_pppoe_service;
     strlcpy(ppp_devnam, devnam, sizeof(ppp_devnam));
     if (existingSession) {
 	unsigned int mac[ETH_ALEN];
@@ -345,9 +345,6 @@ plugin_init(void)
     }
 
     add_options(Options);
-
-    info("RP-PPPoE plugin version %s compiled against pppd %s",
-	 RP_VERSION, VERSION);
 }
 
 void pppoe_check_options(void)

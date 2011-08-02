@@ -348,8 +348,10 @@ session_start(flags, user, passwd, ttyName, msg)
 	/*
 	 * If no passwd, don't let them login if we're authenticating.
 	 */
+#ifndef NO_CRYPT_HACK
         if (pw->pw_passwd == NULL || strlen(pw->pw_passwd) < 2
             || strcmp(crypt(passwd, pw->pw_passwd), pw->pw_passwd) != 0)
+#endif
             return SESSION_FAILED;
     }
 

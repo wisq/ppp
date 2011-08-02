@@ -1,7 +1,7 @@
 #CC	= gcc
-COPTS	= -O2 -g
-CFLAGS	= $(COPTS) -I.. -I../../include -fPIC
-LDFLAGS	= -shared
+CFLAGS	= -O2 -g
+COPTS	= -I.. -I../../include -fPIC
+LDFLAGS	= 
 INSTALL	= install
 
 DESTDIR = $(INSTROOT)@DESTDIR@
@@ -22,8 +22,11 @@ endif
 all:	$(PLUGINS)
 	for d in $(SUBDIRS); do $(MAKE) $(MFLAGS) -C $$d all; done
 
+%.o: %.c
+	$(CC) $(COPTS) $(CFLAGS) -c $<
+
 %.so: %.c
-	$(CC) -o $@ $(LDFLAGS) $(CFLAGS) $^
+	$(CC) -o $@ $(LDFLAGS) -shared $(COPTS) $(CFLAGS) $^
 
 VERSION = $(shell awk -F '"' '/VERSION/ { print $$2; }' ../patchlevel.h)
 

@@ -316,6 +316,9 @@ main(argc, argv)
     struct protent *protp;
     char numbuf[16];
 
+    strlcpy(path_ipup, _PATH_IPUP, sizeof(path_ipup));
+    strlcpy(path_ipdown, _PATH_IPDOWN, sizeof(path_ipdown));
+
     link_stats_valid = 0;
     new_phase(PHASE_INITIALIZE);
 
@@ -429,6 +432,13 @@ main(argc, argv)
 	    fatal("Critical shortage of file descriptors: dup failed: %m");
 	fd_devnull = i;
     }
+
+    /*
+     * pppd sends signals to the whole process group, so it must always
+     * create a new one or it may kill the parent process and its siblings.
+     */
+    setsid();
+    chdir("/");
 
     /*
      * Initialize system-dependent stuff.
@@ -770,12 +780,9 @@ detach()
 	/* update pid files if they have been written already */
 	if (pidfilename[0])
 	    create_pidfile(pid);
-	if (linkpidfile[0])
-	    create_linkpidfile(pid);
+	create_linkpidfile(pid);
 	exit(0);		/* parent dies */
     }
-    setsid();
-    chdir("/");
     dup2(fd_devnull, 0);
     dup2(fd_devnull, 1);
     dup2(fd_devnull, 2);
@@ -1633,7 +1640,7 @@ device_script(program, in, out, dont_wait)
     if (log_to_fd >= 0)
 	errfd = log_to_fd;
     else
-	errfd = open(_PATH_CONNERRS, O_WRONLY | O_APPEND | O_CREAT, 0600);
+	errfd = open(_PATH_CONNERRS, O_WRONLY | O_APPEND | O_CREAT, 0644);
 
     ++conn_running;
     pid = safe_fork(in, out, errfd);
@@ -1957,9 +1964,11 @@ script_setenv(var, value, iskey)
 		free(p-1);
 		script_env[i] = newstring;
 #ifdef USE_TDB
-		if (iskey && pppdb != NULL)
-		    add_db_key(newstring);
-		update_db_entry();
+		if (pppdb != NULL) {
+		    if (iskey)
+			add_db_key(newstring);
+		    update_db_entry();
+		}
 #endif
 		return;
 	    }

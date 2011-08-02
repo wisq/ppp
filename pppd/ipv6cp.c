@@ -1120,7 +1120,7 @@ ipv6_check_options()
 
     if (demand && (eui64_iszero(wo->ourid) || eui64_iszero(wo->hisid))) {
 	option_error("local/remote LL address required for demand-dialling\n");
-	exit(1);
+	die(1);
     }
 }
 
@@ -1232,7 +1232,7 @@ ipv6cp_up(f)
 	    }
 
 	}
-	demand_rexmit(PPP_IPV6);
+	demand_rexmit(PPP_IPV6,0);
 	sifnpmode(f->unit, PPP_IPV6, NPMODE_PASS);
 
     } else {

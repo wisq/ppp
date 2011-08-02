@@ -73,6 +73,7 @@ static void lcp_delayed_up __P((void *));
  */
 int	lcp_echo_interval = 0; 	/* Interval between LCP echo-requests */
 int	lcp_echo_fails = 0;	/* Tolerance to unanswered echo-requests */
+bool	lcp_echo_adaptive = 0;	/* request echo only if the link was idle */
 bool	lax_recv = 0;		/* accept control chars in asyncmap */
 bool	noendpoint = 0;		/* don't send/accept endpoint discriminator */
 
@@ -151,6 +152,8 @@ static option_t lcp_option_list[] = {
       OPT_PRIO },
     { "lcp-echo-interval", o_int, &lcp_echo_interval,
       "Set time in seconds between LCP echo requests", OPT_PRIO },
+    { "lcp-echo-adaptive", o_bool, &lcp_echo_adaptive,
+      "Suppress LCP echo requests if traffic was received", 1 },
     { "lcp-restart", o_int, &lcp_fsm[0].timeouttime,
       "Set time in seconds between LCP retransmissions", OPT_PRIO },
     { "lcp-max-terminate", o_int, &lcp_fsm[0].maxtermtransmits,
@@ -397,21 +400,29 @@ lcp_close(unit, reason)
     char *reason;
 {
     fsm *f = &lcp_fsm[unit];
+    int oldstate;
 
     if (phase != PHASE_DEAD && phase != PHASE_MASTER)
 	new_phase(PHASE_TERMINATE);
-    if (f->state == STOPPED && f->flags & (OPT_PASSIVE|OPT_SILENT)) {
+
+    if (f->flags & DELAYED_UP) {
+	untimeout(lcp_delayed_up, f);
+	f->state = STOPPED;
+    }
+    oldstate = f->state;
+
+    fsm_close(f, reason);
+    if (oldstate == STOPPED && f->flags & (OPT_PASSIVE|OPT_SILENT|DELAYED_UP)) {
 	/*
 	 * This action is not strictly according to the FSM in RFC1548,
 	 * but it does mean that the program terminates if you do a
-	 * lcp_close() in passive/silent mode when a connection hasn't
-	 * been established.
+	 * lcp_close() when a connection hasn't been established
+	 * because we are in passive/silent mode or because we have
+	 * delayed the fsm_lowerup() call and it hasn't happened yet.
 	 */
-	f->state = CLOSED;
+	f->flags &= ~DELAYED_UP;
 	lcp_finished(f);
-
-    } else
-	fsm_close(f, reason);
+    }
 }
 
 
@@ -453,9 +464,10 @@ lcp_lowerdown(unit)
 {
     fsm *f = &lcp_fsm[unit];
 
-    if (f->flags & DELAYED_UP)
+    if (f->flags & DELAYED_UP) {
 	f->flags &= ~DELAYED_UP;
-    else
+	untimeout(lcp_delayed_up, f);
+    } else
 	fsm_lowerdown(&lcp_fsm[unit]);
 }
 
@@ -489,6 +501,7 @@ lcp_input(unit, p, len)
 
     if (f->flags & DELAYED_UP) {
 	f->flags &= ~DELAYED_UP;
+	untimeout(lcp_delayed_up, f);
 	fsm_lowerup(f);
     }
     fsm_input(f, p, len);
@@ -2318,6 +2331,22 @@ LcpSendEchoRequest (f)
         if (lcp_echos_pending >= lcp_echo_fails) {
             LcpLinkFailure(f);
 	    lcp_echos_pending = 0;
+	}
+    }
+
+    /*
+     * If adaptive echos have been enabled, only send the echo request if
+     * no traffic was received since the last one.
+     */
+    if (lcp_echo_adaptive) {
+	static unsigned int last_pkts_in = 0;
+
+	update_link_stats(f->unit);
+	link_stats_valid = 0;
+
+	if (link_stats.pkts_in != last_pkts_in) {
+	    last_pkts_in = link_stats.pkts_in;
+	    return;
 	}
     }
 

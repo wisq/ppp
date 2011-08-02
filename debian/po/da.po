@@ -1,0 +1,193 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans#
+#    Developers do not need to manually edit POT or PO files.
+#
+# Claus Hindsgaul <claus_h@image.dk>, 2004.
+# Claus Hindsgaul <claus.hindsgaul@gmail.com>, 2006, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: ppp\n"
+"Report-Msgid-Bugs-To: md@linux.it\n"
+"POT-Creation-Date: 2007-10-24 07:31+0200\n"
+"PO-Revision-Date: 2007-02-03 15:41+0100\n"
+"Last-Translator: Claus Hindsgaul <claus.hindsgaul@gmail.com>\n"
+"Language-Team: Danish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+
+#. Type: text
+#. Description
+#. Main menu item
+#: ../ppp-udeb.templates:2001
+msgid "Configure and start a PPPoE connection"
+msgstr "Sæt PPPoE-forbindelse op og start den"
+
+#. Type: error
+#. Description
+#: ../ppp-udeb.templates:3001
+#, fuzzy
+#| msgid "No concentrator was found"
+msgid "No PPPoE concentrator"
+msgstr "Fandt ingen concentrator"
+
+#. Type: error
+#. Description
+#: ../ppp-udeb.templates:3001
+msgid ""
+"All network interfaces have been probed, but a PPPoE concentrator was not "
+"detected."
+msgstr ""
+"Alle netkort er blevet forespurgt, men der blev ikke fundet nogen PPPoE-"
+"concentator."
+
+#. Type: error
+#. Description
+#. Type: error
+#. Description
+#. Type: error
+#. Description
+#. Type: error
+#. Description
+#: ../ppp-udeb.templates:3001 ../ppp-udeb.templates:7001
+#: ../ppp-udeb.templates:9001 ../ppp-udeb.templates:10001
+#, fuzzy
+#| msgid ""
+#| "The configuration of PPPoE is aborted. It can be attempted again by "
+#| "selecting the relevant menu entry."
+msgid ""
+"The configuration of PPPoE has been aborted. It can be attempted again by "
+"selecting the relevant menu entry."
+msgstr ""
+"Opsætningen af PPPoE blev afbrudt. Et nyt forsøg kan foretages ved at vælge "
+"det relevante menupunkt."
+
+#. Type: string
+#. Description
+#: ../ppp-udeb.templates:5001
+msgid "ISP account username:"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../ppp-udeb.templates:5001
+msgid "Please enter the username for the PPP connection."
+msgstr "Angiv brugernavn for PPP-forbindelsen."
+
+#. Type: string
+#. Description
+#. Type: password
+#. Description
+#: ../ppp-udeb.templates:5001 ../ppp-udeb.templates:6001
+#, fuzzy
+#| msgid ""
+#| "This information should have been provided to you by your Internet "
+#| "Service Provider."
+msgid ""
+"This information should have been provided by your Internet Service Provider."
+msgstr "Du har fået disse oplysninger af din internetudbyder."
+
+#. Type: password
+#. Description
+#: ../ppp-udeb.templates:6001
+#, fuzzy
+#| msgid "PPP password:"
+msgid "ISP account password:"
+msgstr "PPP-adgangskode:"
+
+#. Type: password
+#. Description
+#: ../ppp-udeb.templates:6001
+msgid "Please enter the password for the PPP connection."
+msgstr "Angiv PPP-forbindelsens adgangskode."
+
+#. Type: error
+#. Description
+#: ../ppp-udeb.templates:7001
+#, fuzzy
+#| msgid "No Ethernet interface found"
+msgid "No Ethernet interface"
+msgstr "Fandt ingen Ethernet-netkort"
+
+#. Type: error
+#. Description
+#: ../ppp-udeb.templates:7001
+msgid ""
+"PPPoE networking cannot be configured because no Ethernet interface was "
+"detected."
+msgstr ""
+"PPPoE-netværk kan ikke sættes op, de der ikke blev fundet nogen Ethernet-"
+"netkort."
+
+#. Type: text
+#. Description
+#: ../ppp-udeb.templates:8001
+msgid "Searching for concentrators on ${IFACE}..."
+msgstr "Søger efter concentratorer på ${IFACE}..."
+
+#. Type: error
+#. Description
+#: ../ppp-udeb.templates:9001
+msgid "Failed authentication"
+msgstr "Mislykket autentifikation"
+
+#. Type: error
+#. Description
+#: ../ppp-udeb.templates:9001
+#, fuzzy
+#| msgid ""
+#| "A PPPoE connection was attempted, but the provided login information was "
+#| "incorrect. Because of this the authentication failed."
+msgid ""
+"A PPPoE connection was attempted, but the provided login information was "
+"probably incorrect."
+msgstr ""
+"Det blev forsøgt at forbinde med PPPoE, men de givne login-oplysninger var "
+"ugyldige. Derfor mislykkedes autentifikationen."
+
+#. Type: error
+#. Description
+#: ../ppp-udeb.templates:9001
+#, fuzzy
+#| msgid "Please make sure you type the correct username and password."
+msgid "Please check the username and password you provided."
+msgstr "Sørg for at skrive det korrekte brugernavn og adgangskode."
+
+#. Type: error
+#. Description
+#: ../ppp-udeb.templates:10001
+msgid "Unhandled error"
+msgstr "Ikke-håndteret fejl"
+
+#. Type: error
+#. Description
+#: ../ppp-udeb.templates:10001
+msgid "An unidentified error happened while attempting to create a connection."
+msgstr ""
+
+#. Type: text
+#. Description
+#: ../ppp-udeb.templates:11001
+msgid "Please wait..."
+msgstr "Vent venligst..."
+
+#~ msgid "PPP login:"
+#~ msgstr "PPP-logind:"
+
+#~ msgid ""
+#~ "It seems that the attempt to create a connection resulted in an unhandled "
+#~ "error. Probably there is some exceptional situation which prevents "
+#~ "establishing the connection."
+#~ msgstr ""
+#~ "Det lader til, at forsøget på at oprette en forbindelse resulterede i en "
+#~ "fejl, der ikke kan håndteres. Der er sandsynligvis en helt speciel "
+#~ "situation, der forhindrer forbindelsen i at blive oprettet."

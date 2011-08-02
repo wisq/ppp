@@ -1,3 +1,9 @@
+ppp (2.4.5-4wisq1) unstable; urgency=low
+
+  * Add unit-max configuration parameter.
+
+ -- Adrian Irving-Beer <wisq@wisq.net>  Tue, 02 Aug 2011 12:24:28 -0400
+
 ppp (2.4.5-4) unstable; urgency=low
 
   * Make sure to actually rebuild pppd for the udeb instead of using the
